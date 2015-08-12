@@ -13,7 +13,7 @@
 <body>
 <div class="container">
 
-    <h1>CSS Beautify <small>automatically formats your style to be consistent and easy to read</small></h1>
+    <h1>CSS Cascade <small>automatically formats your style to be tidy and cascaded.</small></h1>
     <ul>
         <li>Only one blank line between two rulesets</li>
         <li>Closed curly brace is at its own line</li>
@@ -27,7 +27,8 @@
 
     <div class="raw">
         <h3>Type any unformatted CSS:</h3>
-        <textarea id="raw" rows="22" autofocus="autofocus" spellcheck="false" onChange='format()' onKeyDown='format()'>menu{color:red} navigation{background-color:#333 /* darkgrey */}</textarea>
+        <textarea id="raw" rows="22" autofocus="autofocus" spellcheck="false" onChange='format()' onKeyDown='format()'>
+ #wrapper { position: relative; top: 0; left: 0; z-index: 1; float: left; } .box{ box-sizing: border-box; display: block; width: 100%; margin: 10px; padding: 10px; overflow: hidden; } .table{ border: 1px solid black; border-radius: 10px; background-color: black; background-repeat: no-repeat; }.main{ color: white; text-decoration: none; transform: translate3d(0, 0, 0); transition: all 0.25s; opacity: 0.5; }</textarea>
     </div>
 
     <div class="formatted">
@@ -47,6 +48,12 @@
         <label><input type="radio" name="openbrace" id="openbrace-separate-line" onChange='format()'>separate line</label>
         </p>
         <p><label><input checked type="checkbox" name="autosemicolon" id="autosemicolon" onChange='format()'>Automatic semicolon</label></p>
+		<p>Cascading Style<br>
+        <label><input checked type="radio" name="cascadingstyle" id="alternate" value="alternate" onChange='format()'>Alternate</label><br>
+        <label><input type="radio" name="cascadingstyle" id="increasing" value="increasing" onChange='format()'>Increasing</label><br>
+		<label><input type="radio" name="cascadingstyle" id="decreasing" value="decreasing" onChange='format()'>Decreasing</label><br>
+		<label><input type="radio" name="cascadingstyle" id="none" value="none" onChange='format()'>None (Boo hoo!)</label>
+        </p>
     </div>
 
     <br clear="all"/>

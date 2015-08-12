@@ -37,7 +37,9 @@
             ch, ch2, str, state, State, depth, quote, comment,
             openbracesuffix = true,
             autosemicolon = false,
-            trimRight;
+            trimRight,
+			cascadingstyle = 'alternate',
+			alternatingcascades = false,
 
         options = arguments.length > 1 ? opt : {};
         if (typeof options.indent === 'undefined') {
@@ -48,6 +50,9 @@
         }
         if (typeof options.autosemicolon === 'boolean') {
             autosemicolon = options.autosemicolon;
+        }
+		if (typeof options.cascadingstyle === 'string') {
+            cascadingstyle = options.cascadingstyle
         }
 
         function isWhitespace(c) {
@@ -87,7 +92,64 @@
             }
             depth += 1;
         }
+		
+		function cascade(block){
+			if(block.split("{").length > 2){
+				return block;
+			}
+			
+			var lines = block.split("\n");
+			var start = -1;
+			var end = -1;
+			for(var i = 0; i<lines.length; i++){
+				if(lines[i].indexOf("{") > -1 && start == -1){
+					start = i;
+				}else if(lines[i].indexOf("}") > -1 && end == -1){
+					end = i;
+				}
+			}
+			
+			if(end != lines.length - 1){
+				return block;
+			}
+			
+			var reducedLines = lines;
+			var beg = lines[start];
+			var fin = lines[lines.length - 1];
+			
+			reducedLines.shift();
+			while(start != 0){
+				reducedLines.shift();
+				start--;
+			}
+			
+			reducedLines.pop();	
+			reducedLines = reducedLines.sort(function(a, b){
+				if(a.length == b.length){
+					if((alternatingcascades && cascadingstyle == 'alternate') || cascadingstyle == 'increasing'){
+						return a.indexOf(":") - b.indexOf(":");
+					}else if((!alternatingcascades && cascadingstyle == 'alternate') || cascadingstyle == 'decreasing'){
+						return b.indexOf(":") - a.indexOf(":");						
+					}
+				}
+				if((alternatingcascades && cascadingstyle == 'alternate') || cascadingstyle == 'increasing'){
+					return a.length - b.length;
+				}else if((!alternatingcascades && cascadingstyle == 'alternate') || cascadingstyle == 'decreasing'){
+					return b.length - a.length;
+				}else{
+					return 0;
+				}
+			});
+					
+			reducedLines = reducedLines.join("\n");
+			reducedLines = beg + "\n" + reducedLines + "\n" + fin + "\n\n";
 
+			if(cascadingstyle == 'alternate'){
+				alternatingcascades = !alternatingcascades;
+			}
+			return reducedLines;
+		}
+		
         function closeBlock() {
             var last;
             depth -= 1;
@@ -103,6 +165,7 @@
             formatted += '\n';
             appendIndent();
             formatted += '}';
+			formatted = cascade(formatted);
             blocks.push(formatted);
             formatted = '';
         }
@@ -452,9 +515,10 @@
             // infinite loop).
             formatted += ch;
         }
-
+		
         formatted = blocks.join('') + formatted;
-
+		var cascaded = "";
+		
         return formatted;
     }
 

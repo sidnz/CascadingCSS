@@ -19,6 +19,16 @@ function format() {
         } else if (document.getElementById('twospaces').checked) {
             options.indent = '  ';
         }
+		
+		if (document.getElementById('alternate').checked) {
+            options.cascadingstyle = 'alternate';
+        } else if (document.getElementById('increasing').checked) {
+            options.cascadingstyle = 'increasing';
+        } else if (document.getElementById('decreasing').checked) {
+            options.cascadingstyle = 'decreasing';
+        } else if (document.getElementById('none').checked) {
+            options.cascadingstyle = 'none';
+        }
 
         if (document.getElementById('openbrace-separate-line').checked) {
             options.openbrace = 'separate-line';
