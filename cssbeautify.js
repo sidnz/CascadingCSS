@@ -118,7 +118,7 @@
 			var fin = lines[lines.length - 1];
 			
 			reducedLines.shift();
-			while(start != 0){
+			while(start > 0){
 				reducedLines.shift();
 				start--;
 			}
