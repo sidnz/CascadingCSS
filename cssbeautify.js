@@ -95,7 +95,7 @@
 		
 		function cascade(block){
 			if(block.split("{").length > 2){
-				return block;
+				return block + "\n";
 			}
 			
 			var lines = block.split("\n");
@@ -114,8 +114,8 @@
 			}
 			
 			var reducedLines = lines;
-			var beg = lines[start];
-			var fin = lines[lines.length - 1];
+			var beg = lines[start] ? lines[start] : "";
+			var fin = lines[lines.length - 1] ? lines[lines.length - 1] : "";
 			
 			reducedLines.shift();
 			while(start > 0){
@@ -140,7 +140,11 @@
 					return 0;
 				}
 			});
-					
+
+			if(reducedLines.length == 0){
+				return beg + reducedLines + fin + "\n";
+			}
+			
 			reducedLines = reducedLines.join("\n");
 			reducedLines = beg + "\n" + reducedLines + "\n" + fin + "\n\n";
 
